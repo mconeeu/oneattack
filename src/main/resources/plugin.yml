@@ -1,0 +1,5 @@
+name: MCONE-OneAttack
+authors: [Marvin Hülsmann]
+version: ${project.version}
+main: eu.mcone.oneattack.OneAttack
+depend: [MCONE-BukkitCoreSystem, MCONE-GameAPI]
