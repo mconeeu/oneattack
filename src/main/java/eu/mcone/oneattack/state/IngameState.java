@@ -15,15 +15,19 @@ import eu.mcone.oneattack.inventorys.DefendSpawnLocationInventory;
 import eu.mcone.oneattack.kit.DefenderRole;
 import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.listener.InventoryTriggerListener;
+import eu.mcone.oneattack.listener.PlayerMoveListener;
 import eu.mcone.oneattack.objectives.InGameObjective;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class IngameState extends InGameState {
 
@@ -61,40 +65,9 @@ public class IngameState extends InGameState {
                                             OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§fDie Vorbereitsphase endet in einer Sekunden");
 
 
-                                            System.out.println("§aTeleport to vote spawnlocations..");
-                                            if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-                                                //ATTACK
-                                                if (AttackSpawnLocationInventory.gerage > AttackSpawnLocationInventory.main_entrance) {
-                                                    gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.1"));
-                                                    System.out.println("§aTeleport attacker to attacker.spawn.1");
-                                                } else if (AttackSpawnLocationInventory.gerage < AttackSpawnLocationInventory.main_entrance) {
-                                                    gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.2"));
-                                                    System.out.println("§aTeleport attacker to attacker.spawn.2");
-                                                } else {
-                                                    System.out.println("§aTeleport attacker to attacker.spawn.1 because he dont choose");
-                                                    gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.1"));
-                                                }
-                                            } else if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
-                                                //DEFEND
-                                                if (DefendSpawnLocationInventory.gerage > 0 && DefendSpawnLocationInventory.kitchen > 0 && DefendSpawnLocationInventory.thirdfloor > 0) {
-                                                    if (DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.kitchen && DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.thirdfloor) {
-                                                        System.out.println("§aTeleport defender to defender.spawn.gerage");
-                                                        gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"));
-                                                    } else if (DefendSpawnLocationInventory.kitchen < DefendSpawnLocationInventory.thirdfloor) {
-                                                        System.out.println("§aTeleport defender to defender.spawn.kitchen");
-                                                        gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"));
-                                                    } else {
-                                                        System.out.println("§aTeleport defender to defender.spawn.thirdfloor");
-                                                        gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.thirdfloor"));
-                                                    }
-                                                } else {
-                                                    System.out.println("§aTeleport defender to defender.spawn.gerage");
-                                                    gameplayers.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"));
-                                                }
-                                            }
-
-
+                                            teleportPlayerToLocation(gameplayers);
                                             gameplayers.bukkit().closeInventory();
+                                            PlayerMoveListener.isPreparing.clear();
 
                                             if (gameplayers.getCurrentKit().equals(Role.DEFAULT_ATTACKER) || gameplayers.getCurrentKit().equals(Role.DEFAULT_DEFENDS)) {
                                                 if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
@@ -135,6 +108,65 @@ public class IngameState extends InGameState {
         }
 
         super.onStart(event);
+    }
+
+    /*
+     * Gerage -> 1 defender.spawn.gerage
+     * kitchen -> 2 defender.spawn.kitchen
+     * thirdfloor -> 3 defender.spawn.thirdfloor
+     */
+
+    private Location mathDefenderSpawnLocation() {
+        if (DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.kitchen && DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.thirdfloor) {
+            System.out.println("§aTeleport defender to defender.spawn.gerage");
+            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage");
+        } else if (DefendSpawnLocationInventory.kitchen > DefendSpawnLocationInventory.thirdfloor) {
+            System.out.println("§aTeleport defender to defender.spawn.kitchen");
+            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen");
+        } else if (DefendSpawnLocationInventory.kitchen < DefendSpawnLocationInventory.thirdfloor) {
+            System.out.println("§aTeleport defender to defender.spawn.thirdfloor");
+            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.thirdfloor");
+        } else {
+            System.out.println("§aTeleport defender to defender.spawn.gerage because nobody he not choosed!");
+            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage");
+        }
+    }
+
+    private Location mathAttackerSpawnLocation() {
+        if (AttackSpawnLocationInventory.gerage > AttackSpawnLocationInventory.main_entrance) {
+            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.1");
+            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.1");
+            } else {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.1");
+            }
+        } else if (AttackSpawnLocationInventory.gerage < AttackSpawnLocationInventory.main_entrance) {
+            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.2");
+            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.2");
+            } else {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.2");
+            }
+        } else {
+            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.1");
+            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.1");
+            } else {
+                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.1");
+            }
+        }
+    }
+
+    private void teleportPlayerToLocation(GamePlayer gamePlayer) {
+        System.out.println("§aTeleport to vote spawnlocations..");
+        if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
+            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathAttackerSpawnLocation().toString()));
+        } else if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
+            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathDefenderSpawnLocation().toString()));
+        }
     }
 
     private void openSpawnInv(GamePlayer gamePlayer) {

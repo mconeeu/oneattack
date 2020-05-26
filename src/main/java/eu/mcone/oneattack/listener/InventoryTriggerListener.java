@@ -50,20 +50,23 @@ public class InventoryTriggerListener implements Listener {
                 e.setCancelled(true);
             } else {
                 if (itemStack.getType().equals(Items.DEFUSER.getItem().getType())) {
-                    if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-1")) <= 3) {
+                    if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-1")) <= 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-2")) <= 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
-                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-2")) <= 3) {
+                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-3")) <= 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-4")) <= 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
-                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-3")) <= 3) {
+                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-5")) <= 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-6")) <= 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
                     } else {
                         OneAttack.getInstance().getMessenger().send(player, "§4Du musst näher an die Bombe!");
                     }
                 } else if (itemStack.getType().equals(Items.REINFORCE_HOE.getItem().getType())) {
-                    if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                    if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                         byte blockData = e.getClickedBlock().getData();
                         if (e.getClickedBlock().getType().equals(Material.STONE) && blockData == (byte) 5) {
                             Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {

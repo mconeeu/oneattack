@@ -95,5 +95,33 @@ public class Role {
             50
     );
 
+    public static final eu.mcone.gameapi.api.kit.Kit TRAPPER = new eu.mcone.gameapi.api.kit.Kit(
+            "Fallenläger-Rolle",
+            new ItemBuilder(Material.WOOD_SWORD)
+                    .displayName("§7Fallenläger-Rolle")
+                    .lore(
+                            "",
+                            "§7§oMit dieser Rolle erhälst du:",
+                            "§8» §64x Bärenfallen",
+                            "",
+                            "§7Kosten: §f100 Coins"
+                    )
+                    .itemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                    .create(),
+            new HashMap<Integer, ItemStack>() {{
+                put(PlayerInventorySlot.HOTBAR_SLOT_1, new ItemBuilder(Material.WOOD_SWORD)
+                        .displayName("§8» §fHolz Schwert")
+                        .unbreakable(true)
+                        .itemFlags(ItemFlag.HIDE_UNBREAKABLE)
+                        .create()
+                );
+                put(PlayerInventorySlot.HOTBAR_SLOT_2, Items.PUSHER_PICKAXE.getItem());
+                put(PlayerInventorySlot.HOTBAR_SLOT_3, Items.REINFORCE_HOE.getItem());
+                put(PlayerInventorySlot.HOTBAR_SLOT_4, Items.TRAPS.getItem());
+            }},
+            100
+    );
+
+
 
 }

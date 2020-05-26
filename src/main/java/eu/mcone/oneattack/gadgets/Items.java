@@ -16,6 +16,7 @@ public enum Items {
     /* DEFENDS */
 
     REINFORCE_HOE("Reinforce Hoe", new ItemBuilder(Material.IRON_HOE, 6).unbreakable(true).displayName("§fReinforce Hoe").create()),
+    TRAPS("Bären Fallen", new ItemBuilder(Material.WOOD_PLATE, 4).unbreakable(true).displayName("§fBären Falle").create()),
 
     /* ALL */
 

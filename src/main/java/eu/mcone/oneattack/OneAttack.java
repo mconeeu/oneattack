@@ -65,7 +65,8 @@ public class OneAttack extends GamePlugin {
                 new GeneralPlayerListener(),
                 new EntityDamageByEntityListener(),
                 new PlayerDeathListener(),
-                new GameEndListener()
+                new GameEndListener(),
+                new PlayerMoveListener()
         );
 
         registerCommands(

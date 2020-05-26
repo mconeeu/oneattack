@@ -9,6 +9,7 @@ import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.GamePlayerState;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.kit.Role;
+import eu.mcone.oneattack.listener.PlayerMoveListener;
 import eu.mcone.oneattack.objectives.InGameObjective;
 import eu.mcone.oneattack.objectives.LobbyObjective;
 import org.bukkit.Bukkit;
@@ -38,7 +39,9 @@ public class LobbyState extends LobbyGameState {
     public void onCountdownSecond(CorePlugin plugin, int second) {
         super.onCountdownSecond(plugin, second);
 
-        if (second == 5) {
+        if (second == 6) {
+            PlayerMoveListener.isPreparing.addAll(Bukkit.getOnlinePlayers());
+        } else if (second == 5) {
             OneAttack.getInstance().getTeamManager().setTeamsForRemainingPlayersBalanced();
 
             for (GamePlayer gamePlayer : OneAttack.getInstance().getOnlineGamePlayers()) {

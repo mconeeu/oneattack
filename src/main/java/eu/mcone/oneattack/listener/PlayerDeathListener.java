@@ -5,13 +5,14 @@ import eu.mcone.coresystem.api.bukkit.hologram.Hologram;
 import eu.mcone.coresystem.api.bukkit.hologram.HologramData;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.coresystem.api.bukkit.util.Messenger;
+import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
-import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -24,6 +25,18 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerDeathListener implements Listener {
+
+    public static Hologram hologram;
+
+    public static void createDefuserHolo(Player player) {
+       hologram = CoreSystem.getInstance().getHologramManager().addHologram(
+                new HologramData(
+                        "defuser",
+                        new String[]{"§fEntschärfer"},
+                        new CoreLocation(player.getLocation())
+                )
+        );
+    }
 
     @EventHandler
     public void on(PlayerDeathEvent e) {
@@ -40,14 +53,14 @@ public class PlayerDeathListener implements Listener {
             Items.hasDefuser.remove(player);
             player.getLocation().getWorld().dropItem(player.getLocation(), Items.DEFUSER.getItem());
 
+            createDefuserHolo(player);
 
-            for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                GamePlayer gamePlayers = OneAttack.getInstance().getGamePlayer(all);
                 if (gamePlayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-                    OneAttack.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§4Der Spieler §c" + player.getName() + "§4 hat den Entschärfer fallen gelassen finde ihn!");
+                    OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§4Der Spieler §c" + player.getName() + "§4 hat den Entschärfer fallen gelassen finde ihn!");
                 }
             }
-            //TODO HOLO
-            //CoreSystem.getInstance().getHologramManager().addHologram(HologramData);
         }
 
         if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState

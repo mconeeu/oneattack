@@ -4,6 +4,7 @@ import eu.mcone.coresystem.api.bukkit.inventory.CoreInventory;
 import eu.mcone.coresystem.api.bukkit.inventory.InventoryOption;
 import eu.mcone.coresystem.api.bukkit.inventory.InventorySlot;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
+import eu.mcone.coresystem.api.bukkit.util.Messenger;
 import eu.mcone.oneattack.OneAttack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +22,7 @@ public class PlantInventory extends CoreInventory {
         super("§fBombe entschärfen", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
         PlantInventory.isDefusing.remove(player);
         isDefusing.add(player);
+        OneAttack.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.INFO_MESSAGE, "§4Die Bombe wird entschärft!");
         setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 9).displayName("§cHacking...").create());
         Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
             if (isDefusing.contains(player)) {

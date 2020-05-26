@@ -22,7 +22,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoin(GamePlayerLoadedEvent e) {
         Player player = e.getBukkitPlayer();
-        GamePlayer gamePlayer = e.getPlayer();
 
         player.setGameMode(GameMode.SURVIVAL);
 
