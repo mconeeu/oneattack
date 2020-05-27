@@ -26,21 +26,25 @@ public class PlantInventory extends CoreInventory {
         setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 9).displayName("§cHacking...").create());
         Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
             if (isDefusing.contains(player)) {
+                new PlantInventory(player);
                 player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
                 setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 6).displayName("§cHacking...").create());
             }
             Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
                 if (isDefusing.contains(player)) {
+                    new PlantInventory(player);
                     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
                     setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 5).displayName("§2Hacking..").create());
                 }
                 Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
                     if (isDefusing.contains(player)) {
+                        new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
                         setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 2).displayName("§aHacking...").create());
                     }
                     Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
                         if (isDefusing.contains(player)) {
+                            new PlantInventory(player);
                             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
                             setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 3).displayName("§dHacking...").create());
                         }

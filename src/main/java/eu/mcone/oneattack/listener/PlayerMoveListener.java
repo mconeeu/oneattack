@@ -3,9 +3,15 @@ package eu.mcone.oneattack.listener;
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
+import eu.mcone.oneattack.gadgets.Items;
+import eu.mcone.oneattack.kit.Role;
+import eu.mcone.oneattack.state.IngameState;
+import eu.mcone.oneattack.state.LobbyState;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,18 +30,18 @@ public class PlayerMoveListener implements Listener {
         Player p = e.getPlayer();
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
 
-        if (!isPreparing.contains(p)) {
-            if (p.getLocation().add(0, +2, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +3, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +4, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +5, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +6, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +7, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +8, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +9, 0).getBlock().getType() == Material.AIR &&
-                    p.getLocation().add(0, +10, 0).getBlock().getType() == Material.AIR
-            ) {
-                if (gamePlayer.getTeam() != null) {
+        if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof IngameState) {
+            if (!isPreparing.contains(p)) {
+                if (p.getLocation().add(0, +2, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +3, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +4, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +5, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +6, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +7, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +8, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +9, 0).getBlock().getType() == Material.AIR &&
+                        p.getLocation().add(0, +10, 0).getBlock().getType() == Material.AIR
+                ) {
                     if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
                         if (!isOutside.contains(p)) {
                             OneAttack.getInstance().getMessenger().send(p, "§cAls §4Verteidiger §cdarfst du dich nicht §4nach draußen §cbegeben!");

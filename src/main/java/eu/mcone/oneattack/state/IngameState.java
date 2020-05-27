@@ -1,20 +1,18 @@
 package eu.mcone.oneattack.state;
 
-import eu.mcone.coresystem.api.bukkit.util.Messenger;
+import eu.mcone.coresystem.api.bukkit.CoreSystem;
+import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStartEvent;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStopEvent;
 import eu.mcone.gameapi.api.gamestate.common.InGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
-import eu.mcone.gameapi.api.team.Team;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
 import eu.mcone.oneattack.inventorys.AttackKitInventory;
 import eu.mcone.oneattack.inventorys.AttackSpawnLocationInventory;
 import eu.mcone.oneattack.inventorys.DefendKitInventory;
 import eu.mcone.oneattack.inventorys.DefendSpawnLocationInventory;
-import eu.mcone.oneattack.kit.DefenderRole;
 import eu.mcone.oneattack.kit.Role;
-import eu.mcone.oneattack.listener.InventoryTriggerListener;
 import eu.mcone.oneattack.listener.PlayerMoveListener;
 import eu.mcone.oneattack.objectives.InGameObjective;
 import org.bukkit.Bukkit;
@@ -22,12 +20,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import org.bukkit.scoreboard.DisplaySlot;
 
 public class IngameState extends InGameState {
 
@@ -69,11 +63,13 @@ public class IngameState extends InGameState {
                                             gameplayers.bukkit().closeInventory();
                                             PlayerMoveListener.isPreparing.clear();
 
-                                            if (gameplayers.getCurrentKit().equals(Role.DEFAULT_ATTACKER) || gameplayers.getCurrentKit().equals(Role.DEFAULT_DEFENDS)) {
-                                                if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-                                                    gameplayers.setKit(Role.DEFAULT_ATTACKER);
-                                                } else if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
-                                                    gameplayers.setKit(Role.DEFAULT_DEFENDS);
+                                            if (gameplayers.getCurrentKit() != null) {
+                                                if (gameplayers.getCurrentKit().equals(Role.DEFAULT_ATTACKER) || gameplayers.getCurrentKit().equals(Role.DEFAULT_DEFENDS)) {
+                                                    if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
+                                                        gameplayers.setKit(Role.DEFAULT_ATTACKER);
+                                                    } else if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
+                                                        gameplayers.setKit(Role.DEFAULT_DEFENDS);
+                                                    }
                                                 }
                                             }
 
@@ -85,13 +81,11 @@ public class IngameState extends InGameState {
 
                                             if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
                                                 OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§cTöte alle Verteidiger oder entschärfe die Bombe");
-
                                                 if (Items.hasDefuser.isEmpty()) {
                                                     gameplayers.bukkit().getInventory().addItem(Items.DEFUSER.getItem());
                                                     Items.hasDefuser.add(gameplayers.bukkit());
                                                     OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§aDu hast den Entschärfer aufgenommen!");
                                                 }
-
                                             } else if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
                                                 OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§cTöte alle Angreifer oder beschütze die Bombe");
                                             }
@@ -116,46 +110,46 @@ public class IngameState extends InGameState {
      * thirdfloor -> 3 defender.spawn.thirdfloor
      */
 
-    private Location mathDefenderSpawnLocation() {
+    private String mathDefenderSpawnLocation() {
         if (DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.kitchen && DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.thirdfloor) {
             System.out.println("§aTeleport defender to defender.spawn.gerage");
-            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage");
+            return "defender.spawn.gerage";
         } else if (DefendSpawnLocationInventory.kitchen > DefendSpawnLocationInventory.thirdfloor) {
             System.out.println("§aTeleport defender to defender.spawn.kitchen");
-            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen");
+            return "defender.spawn.kitchen";
         } else if (DefendSpawnLocationInventory.kitchen < DefendSpawnLocationInventory.thirdfloor) {
             System.out.println("§aTeleport defender to defender.spawn.thirdfloor");
-            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.thirdfloor");
+            return "defender.spawn.thirdfloor";
         } else {
             System.out.println("§aTeleport defender to defender.spawn.gerage because nobody he not choosed!");
-            return OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage");
+            return "defender.spawn.gerage";
         }
     }
 
-    private Location mathAttackerSpawnLocation() {
+    private String mathAttackerSpawnLocation() {
         if (AttackSpawnLocationInventory.gerage > AttackSpawnLocationInventory.main_entrance) {
-            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.1");
-            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.1");
+            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
+                return "attacker.spawn.bomb1.1";
+            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
+                return "attacker.spawn.bomb2.1";
             } else {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.1");
+                return "attacker.spawn.bomb3.1";
             }
         } else if (AttackSpawnLocationInventory.gerage < AttackSpawnLocationInventory.main_entrance) {
-            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.2");
-            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.2");
+            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
+                return "attacker.spawn.bomb1.2";
+            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
+                return "attacker.spawn.bomb2.2";
             } else {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.2");
+                return "attacker.spawn.bomb3.2";
             }
         } else {
-            if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.gerage"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb1.1");
-            } else if (mathDefenderSpawnLocation().equals(OneAttack.getInstance().getGameWorld().getLocation("defender.spawn.kitchen"))) {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb2.1");
+            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
+                return "attacker.spawn.bomb1.1";
+            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
+                return "attacker.spawn.bomb2.1";
             } else {
-                return OneAttack.getInstance().getGameWorld().getLocation("attacker.spawn.bomb3.1");
+                return "attacker.spawn.bomb3.1";
             }
         }
     }
@@ -163,9 +157,9 @@ public class IngameState extends InGameState {
     private void teleportPlayerToLocation(GamePlayer gamePlayer) {
         System.out.println("§aTeleport to vote spawnlocations..");
         if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathAttackerSpawnLocation().toString()));
+            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathAttackerSpawnLocation()));
         } else if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
-            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathDefenderSpawnLocation().toString()));
+            gamePlayer.bukkit().teleport(OneAttack.getInstance().getGameWorld().getLocation(mathDefenderSpawnLocation()));
         }
     }
 

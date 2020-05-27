@@ -18,11 +18,11 @@ public class DefendSpawnLocationInventory extends CoreInventory {
     public static int gerage = 0;
 
     public DefendSpawnLocationInventory(Player player) {
-        super("", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
+        super("Verteidungs Orte", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
 
         setItem(InventorySlot.ROW_2_SLOT_3, new ItemBuilder(Material.FURNACE, kitchen, 0)
-                        .displayName("§eBombenOrt | §fKüche")
+                        .displayName("§eBombenOrt | §fKüche, Büro")
                         .lore("§7§oVote dafür wo", "§7§oder BombenOrt ist", "", "§8» §f§nLinksklick§8 | §7§oVoten")
                         .create(),
 
@@ -35,8 +35,8 @@ public class DefendSpawnLocationInventory extends CoreInventory {
                     OneAttack.getInstance().getMessenger().send(player, "§aDu hast erfolgreich für den BombenOrt Küche gevotet!");
                 });
 
-        setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.CLAY, gerage, 5)
-                        .displayName("§eBombenOrt | §fGerage")
+        setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.CLAY, gerage, 0)
+                        .displayName("§eBombenOrt | §fGerage, Geragenraum")
                         .lore("§7§oVote dafür wo", "§7§oder BombenOrt ist", "", "§8» §f§nLinksklick§8 | §7§oVoten")
                         .create(),
 
@@ -50,7 +50,7 @@ public class DefendSpawnLocationInventory extends CoreInventory {
                 });
 
         setItem(InventorySlot.ROW_2_SLOT_7, new ItemBuilder(Material.WOOD, thirdfloor, 0)
-                        .displayName("§eBombenOrt | §f1. Etage")
+                        .displayName("§eBombenOrt | §fKinder, Elternschlaffzimmer")
                         .lore("§7§oVote dafür wo", "§7§oder BombenOrt ist", "", "§8» §f§nLinksklick§8 | §7§oVoten")
                         .create(),
 

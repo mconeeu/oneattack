@@ -11,10 +11,12 @@ import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
+import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -105,6 +107,12 @@ public class GeneralPlayerListener implements Listener {
     public void onItemPickUp(PlayerPickupItemEvent e) {
         Player p = e.getPlayer();
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
+
+        if (gamePlayer.getCurrentKit().equals(Role.TRAPPER)) {
+            if (e.getItem().getItemStack().getType().equals(Items.TRAPS.getItem().getType())) {
+                e.setCancelled(false);
+            }
+        }
 
         if (e.getItem().getItemStack().getType().equals(Items.DEFUSER.getItem().getType())) {
             if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {

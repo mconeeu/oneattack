@@ -10,20 +10,31 @@ public enum AttackerRole {
 
     DEFAULT_ROLE("Standard Rolle", Role.DEFAULT_ATTACKER, new ItemBuilder(Material.IRON_PICKAXE, 1).displayName("§fStandard Rolle")
             .lore("",
-            "§7§oMit dieser Rolle erhälst du:",
-            "§8» §6Keinen Vorteile",
-            "",
-            "§7Kosten: §f0 Coins",
-            "§c§oDu hast dieses Kit immer!"
-    ).create()),
+                    "§7§oMit dieser Rolle erhälst du:",
+                    "§8» §6Keinen Vorteile",
+                    "",
+                    "§7Kosten: §f0 Coins",
+                    "§c§oDu hast dieses Kit immer!"
+            ).create()),
 
     PUSHER("Pusher Rolle", Role.PUSHER, new ItemBuilder(Material.IRON_SWORD, 1).displayName("§fPusher Rolle")
             .lore("",
                     "§7§oMit dieser Rolle erhälst du:",
-                    "§8» §6Eine Hacke die nicht",
+                    "§8» §64 Spitzhacke die schneller nicht",
                     "§8» §6verstärkte Wände öffnet",
                     "",
                     "§7Kosten: §f50 Coins"
+            ).create()),
+
+    SAVER("§fSicherer Rolle", Role.SAVER, new ItemBuilder(Material.GOLD_CHESTPLATE, 1).displayName("§fSicherer Rolle")
+            .displayName("§fSicherer-Rolle")
+            .lore(
+                    "",
+                    "§7§oMit dieser Rolle erhälst du:",
+                    "§8» §64 Spitzhacken die",
+                    "§8» §64 verstärkte Wände öffnet",
+                    "",
+                    "§7Kosten: §f25 Coins"
             ).create());
 
 

@@ -25,8 +25,19 @@ public enum DefenderRole {
                     "§8» §64x Bärenfallen",
                     "",
                     "§7Kosten: §f100 Coins"
-            ).create());
+            ).create()),
 
+    BARRICADER("§fFallenläger Rolle", Role.BARRICADER, new ItemBuilder(Material.IRON_PLATE, 1).displayName("§fBarrikader Rolle")
+            .displayName("§fBarrikader-Rolle")
+            .lore(
+                    "",
+                    "§7§oMit dieser Rolle erhälst du:",
+                    "§8» §45 Steine die angreifern",
+                    "§8» §4hindern könnte",
+                    "",
+                    "§7Kosten: §f25 Coins"
+
+            ).create());
 
     @Getter
     private final String name;

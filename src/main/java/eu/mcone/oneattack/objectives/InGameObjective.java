@@ -29,6 +29,7 @@ public class InGameObjective extends eu.mcone.gameapi.api.scoreboard.InGameObjec
     @Override
     protected void onReload(CorePlayer corePlayer) {
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(corePlayer.getUuid());
+        setScore(1, "   §f§l" + gamePlayer.getCurrentKit().getName());
         setScore(4, "   §f§l" + gamePlayer.getRoundKills());
         setScore(7, "   §f§l" + OneAttack.getInstance().getPlayerManager().getPlayers(GamePlayerState.PLAYING).size());
     }

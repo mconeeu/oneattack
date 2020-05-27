@@ -3,15 +3,18 @@ package eu.mcone.oneattack.listener;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.gameapi.api.GameAPI;
 import eu.mcone.gameapi.api.backpack.defaults.DefaultCategory;
+import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
 import eu.mcone.oneattack.inventorys.PlantInventory;
+import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +30,7 @@ public class InventoryTriggerListener implements Listener {
     @EventHandler
     public void on(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+
 
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack itemStack = e.getItem();
@@ -49,17 +53,36 @@ public class InventoryTriggerListener implements Listener {
 
                 e.setCancelled(true);
             } else {
+                if (e.getClickedBlock() != null) {
+                    if (e.getClickedBlock().getType() == Material.WOOD_PLATE && Items.trapLocations.contains(e.getClickedBlock().getLocation())) {
+                        GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(player);
+                        if (gamePlayer.getTeam().equals(OneAttack.getInstance().getAttackTeam())) {
+                            e.getClickedBlock().setType(Material.AIR);
+                            player.damage(6F);
+                            player.playSound(player.getLocation(), Sound.CAT_PURR, 1, 1);
+                            OneAttack.getInstance().getMessenger().send(player, "§cDu hast schaden durch eine Bären Falle erhalten!");
+
+                            for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+                                if (gamePlayers.getCurrentKit().equals(Role.TRAPPER)) {
+                                    OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§cEin Angreifer ist in deiner Bären Falle gelaufen!");
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (itemStack.getType().equals(Items.DEFUSER.getItem().getType())) {
-                    if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-1")) <= 3 ||
-                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-2")) <= 3) {
+                    e.setCancelled(true);
+                    if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-1")) < 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-2")) < 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
-                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-3")) <= 3 ||
-                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-4")) <= 3) {
+                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-3")) < 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-4")) < 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
-                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-5")) <= 3 ||
-                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-6")) <= 3) {
+                    } else if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-5")) < 3 ||
+                            player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-6")) < 3) {
                         new PlantInventory(player);
                         player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
                     } else {
@@ -94,6 +117,5 @@ public class InventoryTriggerListener implements Listener {
                 }
             }
         }
-
     }
 }

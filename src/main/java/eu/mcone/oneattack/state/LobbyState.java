@@ -25,7 +25,6 @@ public class LobbyState extends LobbyGameState {
     public void onStop(GameStateStopEvent event) {
         for (Player player : OneAttack.getInstance().getPlayerManager().getPlayers(GamePlayerState.PLAYING)) {
 
-            GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(player);
             CorePlayer corePlayer = CoreSystem.getInstance().getCorePlayer(player.getUniqueId());
 
 
@@ -39,9 +38,9 @@ public class LobbyState extends LobbyGameState {
     public void onCountdownSecond(CorePlugin plugin, int second) {
         super.onCountdownSecond(plugin, second);
 
-        if (second == 6) {
+        if (second == 5) {
             PlayerMoveListener.isPreparing.addAll(Bukkit.getOnlinePlayers());
-        } else if (second == 5) {
+        } else if (second == 4) {
             OneAttack.getInstance().getTeamManager().setTeamsForRemainingPlayersBalanced();
 
             for (GamePlayer gamePlayer : OneAttack.getInstance().getOnlineGamePlayers()) {

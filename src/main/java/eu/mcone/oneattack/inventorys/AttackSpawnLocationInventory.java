@@ -16,7 +16,7 @@ public class AttackSpawnLocationInventory extends CoreInventory {
     public static int gerage = 0;
 
     public AttackSpawnLocationInventory(Player player) {
-        super("", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
+        super("Angriffs Orte", player, InventorySlot.ROW_3, InventoryOption.FILL_EMPTY_SLOTS);
 
         setItem(InventorySlot.ROW_2_SLOT_4, new ItemBuilder(Material.GRASS, main_entrance, 0)
                         .displayName("§eSpawnOrt | §fHaupt Eingang")

@@ -31,7 +31,15 @@ public class BlockEvent implements Listener {
             Block block = e.getBlock();
             Material blockType = block.getType();
             byte blockData = block.getData();
+            e.setCancelled(true);
 
+
+            if (block.getType().equals(Material.WOOD_PLATE)) {
+                e.setCancelled(false);
+                Items.trapLocations.add(block.getLocation());
+            } else if (block.getType().equals(Material.STONE)) {
+                e.setCancelled(false);
+            }
 
         }
     }
@@ -45,16 +53,19 @@ public class BlockEvent implements Listener {
             return;
         }
 
+        Block block = e.getBlock();
+        Material blockType = block.getType();
+        byte blockData = block.getData();
+
+        if (Items.trapLocations.contains(e.getBlock().getLocation())) {
+            e.setCancelled(false);
+        }
+
         if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState || OneAttack.getInstance().getGameStateManager().getRunning() instanceof EndState) {
             e.setCancelled(true);
         } else {
-            Block block = e.getBlock();
-            Material blockType = block.getType();
-            byte blockData = block.getData();
-
-
             if (blockType.equals(Material.STONE) && blockData == (byte) 5 || blockData == (byte) 4) {
-                if (p.getItemInHand().getType().equals(Items.PUSHER_PICKAXE.getItem().getType()) || p.getItemInHand().getType().equals(Items.WALL_PICKAXE.getItem().getType())) {
+                if (p.getItemInHand().getType().equals(Items.PUSHER_PICKAXE.getItem().getType()) || p.getItemInHand().getType().equals(Items.WALL_PICKAXE.getItem().getType()) || p.getItemInHand().getType().equals(Items.FAST_PICKAXE.getItem().getType())) {
                     e.setCancelled(false);
                     e.getBlock().setType(Material.AIR);
                     e.getBlock().getDrops().clear();
