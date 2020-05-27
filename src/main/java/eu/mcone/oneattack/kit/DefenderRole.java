@@ -27,13 +27,13 @@ public enum DefenderRole {
                     "§7Kosten: §f100 Coins"
             ).create()),
 
-    BARRICADER("§fFallenläger Rolle", Role.BARRICADER, new ItemBuilder(Material.IRON_PLATE, 1).displayName("§fBarrikader Rolle")
+    BARRICADER("§fFallenläger Rolle", Role.BARRICADER, new ItemBuilder(Material.STONE, 1).displayName("§fBarrikader Rolle")
             .displayName("§fBarrikader-Rolle")
             .lore(
                     "",
                     "§7§oMit dieser Rolle erhälst du:",
-                    "§8» §45 Steine die angreifern",
-                    "§8» §4hindern könnte",
+                    "§8» §63 Steine die angreifern",
+                    "§8» §6hindern könnte",
                     "",
                     "§7Kosten: §f25 Coins"
 
