@@ -73,6 +73,7 @@ public class IngameState extends InGameState {
                                                 }
                                             }
 
+                                            gameplayers.getCorePlayer().getScoreboard().setNewObjective(new InGameObjective());
 
                                             gameplayers.bukkit().getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
                                             gameplayers.bukkit().getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));

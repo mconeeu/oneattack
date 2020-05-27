@@ -27,8 +27,6 @@ public class LobbyState extends LobbyGameState {
 
             CorePlayer corePlayer = CoreSystem.getInstance().getCorePlayer(player.getUniqueId());
 
-
-            corePlayer.getScoreboard().setNewObjective(new InGameObjective());
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
         }
