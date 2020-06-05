@@ -32,6 +32,28 @@ public class InventoryTriggerListener implements Listener {
         Player player = e.getPlayer();
 
 
+        /* TRAPPER KIT */
+        if (e.getClickedBlock() != null) {
+            if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.WOOD_PLATE && Items.trapLocations.contains(e.getClickedBlock().getLocation())) {
+                GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(player);
+                if (gamePlayer.getTeam().equals(OneAttack.getInstance().getAttackTeam())) {
+                    e.getClickedBlock().setType(Material.AIR);
+                    Items.trapLocations.remove(e.getClickedBlock().getLocation());
+                    player.damage(8F);
+                    player.playSound(player.getLocation(), Sound.CAT_PURR, 1, 1);
+                    OneAttack.getInstance().getMessenger().send(player, "§cDu hast schaden durch eine Bären Falle erhalten!");
+
+                    for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+                        if (gamePlayers.getCurrentKit() != null) {
+                            if (gamePlayers.getCurrentKit().equals(Role.TRAPPER)) {
+                                OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§cEin Angreifer ist in deiner Bären Falle gelaufen!");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             ItemStack itemStack = e.getItem();
             if (itemStack == null) {
@@ -50,27 +72,9 @@ public class InventoryTriggerListener implements Listener {
                     e.setCancelled(true);
                     OneAttack.getInstance().getPlayerManager().openSpectatorInventory(player);
                 }
-
                 e.setCancelled(true);
             } else {
-                if (e.getClickedBlock() != null) {
-                    if (e.getClickedBlock().getType() == Material.WOOD_PLATE && Items.trapLocations.contains(e.getClickedBlock().getLocation())) {
-                        GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(player);
-                        if (gamePlayer.getTeam().equals(OneAttack.getInstance().getAttackTeam())) {
-                            e.getClickedBlock().setType(Material.AIR);
-                            player.damage(6F);
-                            player.playSound(player.getLocation(), Sound.CAT_PURR, 1, 1);
-                            OneAttack.getInstance().getMessenger().send(player, "§cDu hast schaden durch eine Bären Falle erhalten!");
-
-                            for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
-                                if (gamePlayers.getCurrentKit().equals(Role.TRAPPER)) {
-                                    OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§cEin Angreifer ist in deiner Bären Falle gelaufen!");
-                                }
-                            }
-                        }
-                    }
-                }
-
+                /* DEFUSER */
                 if (itemStack.getType().equals(Items.DEFUSER.getItem().getType())) {
                     e.setCancelled(true);
                     if (player.getLocation().distance(OneAttack.getInstance().getGameWorld().getBlockLocation("bomb-1")) < 3 ||
@@ -88,6 +92,7 @@ public class InventoryTriggerListener implements Listener {
                     } else {
                         OneAttack.getInstance().getMessenger().send(player, "§4Du musst näher an die Bombe!");
                     }
+                    /* REINFORCE */
                 } else if (itemStack.getType().equals(Items.REINFORCE_HOE.getItem().getType())) {
                     if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                         byte blockData = e.getClickedBlock().getData();

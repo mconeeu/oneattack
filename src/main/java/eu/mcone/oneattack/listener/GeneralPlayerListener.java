@@ -108,9 +108,11 @@ public class GeneralPlayerListener implements Listener {
         Player p = e.getPlayer();
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
 
-        if (gamePlayer.getCurrentKit().equals(Role.TRAPPER)) {
-            if (e.getItem().getItemStack().getType().equals(Items.TRAPS.getItem().getType())) {
-                e.setCancelled(false);
+        if (gamePlayer.getCurrentKit() != null) {
+            if (gamePlayer.getCurrentKit().equals(Role.TRAPPER)) {
+                if (e.getItem().getItemStack().getType().equals(Items.TRAPS.getItem().getType())) {
+                    e.setCancelled(false);
+                }
             }
         }
 

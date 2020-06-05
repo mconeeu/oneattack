@@ -3,6 +3,7 @@ package eu.mcone.oneattack.listener;
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import eu.mcone.gameapi.api.event.player.GamePlayerLoadedEvent;
+import eu.mcone.gameapi.api.kit.Kit;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
 import eu.mcone.gameapi.api.team.TeamManager;

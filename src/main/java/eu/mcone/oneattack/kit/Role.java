@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class Role {
 
-
     /*    ATTACKER         */
 
     public static final eu.mcone.gameapi.api.kit.Kit DEFAULT_ATTACKER = new eu.mcone.gameapi.api.kit.Kit(

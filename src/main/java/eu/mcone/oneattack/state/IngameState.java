@@ -1,7 +1,5 @@
 package eu.mcone.oneattack.state;
 
-import eu.mcone.coresystem.api.bukkit.CoreSystem;
-import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStartEvent;
 import eu.mcone.gameapi.api.event.gamestate.GameStateStopEvent;
 import eu.mcone.gameapi.api.gamestate.common.InGameState;
@@ -16,12 +14,10 @@ import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.listener.PlayerMoveListener;
 import eu.mcone.oneattack.objectives.InGameObjective;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.DisplaySlot;
 
 public class IngameState extends InGameState {
 
@@ -30,7 +26,7 @@ public class IngameState extends InGameState {
     }
 
     public IngameState() {
-        super(60 * 45);
+        super(60 * 6);
     }
 
     @Override
@@ -58,11 +54,13 @@ public class IngameState extends InGameState {
                                         Bukkit.getScheduler().runTaskLater(OneAttack.getInstance(), () -> {
                                             OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§fDie Vorbereitsphase endet in einer Sekunden");
 
-
                                             teleportPlayerToLocation(gameplayers);
                                             gameplayers.bukkit().closeInventory();
+
+                                            /*  REMOVE USER FROM THE LIST BECAUSE HE GO INSIDE || FOR NO DEATH IN THE WAITING HALL */
                                             PlayerMoveListener.isPreparing.clear();
 
+                                            /*  ADD DEFAULT KITS TO PLAYER THAT HAVE NO ONE PICK */
                                             if (gameplayers.getCurrentKit() != null) {
                                                 if (gameplayers.getCurrentKit().equals(Role.DEFAULT_ATTACKER) || gameplayers.getCurrentKit().equals(Role.DEFAULT_DEFENDS)) {
                                                     if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
@@ -73,7 +71,7 @@ public class IngameState extends InGameState {
                                                 }
                                             }
 
-
+                                            /*  ADD ARMOR */
                                             gameplayers.bukkit().getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
                                             gameplayers.bukkit().getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
                                             gameplayers.bukkit().getInventory().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
@@ -81,16 +79,17 @@ public class IngameState extends InGameState {
 
                                             if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
                                                 OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§cTöte alle Verteidiger oder entschärfe die Bombe");
+
+                                                /*  ADD DEFUSER */
                                                 if (Items.hasDefuser.isEmpty()) {
                                                     gameplayers.bukkit().getInventory().addItem(Items.DEFUSER.getItem());
                                                     Items.hasDefuser.add(gameplayers.bukkit());
                                                     OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§aDu hast den Entschärfer aufgenommen!");
                                                 }
+
                                             } else if (gameplayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
                                                 OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§cTöte alle Angreifer oder beschütze die Bombe");
                                             }
-
-
                                         }, 20L);
                                     }, 20L);
                                 }, 20L);
@@ -110,6 +109,8 @@ public class IngameState extends InGameState {
      * thirdfloor -> 3 defender.spawn.thirdfloor
      */
 
+
+    /*  TELEPORT DEFENDS TO THE SPAWNLOCATION THAT THEY CHOOSED */
     private String mathDefenderSpawnLocation() {
         if (DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.kitchen && DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.thirdfloor) {
             System.out.println("§aTeleport defender to defender.spawn.gerage");
@@ -126,6 +127,7 @@ public class IngameState extends InGameState {
         }
     }
 
+    /*  TELEPORT ATTACKERS TO THE SPAWNLOCATIONS FROM THE DEFENDS LOCATIONS TO HIS VOTE LOCATION */
     private String mathAttackerSpawnLocation() {
         if (AttackSpawnLocationInventory.gerage > AttackSpawnLocationInventory.main_entrance) {
             if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
@@ -154,6 +156,7 @@ public class IngameState extends InGameState {
         }
     }
 
+    /* TELEPORT TO ALL LOCATIONS */
     private void teleportPlayerToLocation(GamePlayer gamePlayer) {
         System.out.println("§aTeleport to vote spawnlocations..");
         if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
@@ -163,6 +166,7 @@ public class IngameState extends InGameState {
         }
     }
 
+    /* CHOOSE SPAWN INV */
     private void openSpawnInv(GamePlayer gamePlayer) {
         if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
             new DefendSpawnLocationInventory(gamePlayer.bukkit());
@@ -171,6 +175,7 @@ public class IngameState extends InGameState {
         }
     }
 
+    /* CHOOSE KIT INV */
     private void openKitInv(GamePlayer gamePlayer) {
         if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
             new DefendKitInventory(gamePlayer.bukkit());

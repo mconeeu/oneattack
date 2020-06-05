@@ -17,6 +17,7 @@ public enum DefenderRole {
                     "§c§oDu hast dieses Kit immer!"
             ).create()),
 
+
     TRAPPER("§fFallenläger Rolle", Role.TRAPPER, new ItemBuilder(Material.IRON_PLATE, 1).displayName("§fFallenläger Rolle")
             .displayName("§7Fallenläger-Rolle")
             .lore(

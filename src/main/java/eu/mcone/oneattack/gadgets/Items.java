@@ -18,7 +18,8 @@ public enum Items {
     /* DEFENDS */
 
     REINFORCE_HOE("Reinforce Hoe", new ItemBuilder(Material.IRON_HOE, 6).unbreakable(true).displayName("§fVerstärker").create()),
-    TRAPS("Bären Fallen", new ItemBuilder(Material.WOOD_PLATE, 4).unbreakable(true).displayName("§fBären Falle").create()),
+    TRAPS("Bären Falle", new ItemBuilder(Material.WOOD_PLATE, 4).unbreakable(true).displayName("§fBären Falle").create()),
+    ONE_TRAP("Bären Falle", new ItemBuilder(Material.WOOD_PLATE, 1).unbreakable(true).displayName("§fBären Falle").create()),
     BARRICADE("Barrikade", new ItemBuilder(Material.STONE, 3).displayName("§fBarrikaden").create()),
 
     /* ALL */

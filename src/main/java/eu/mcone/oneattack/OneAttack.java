@@ -17,6 +17,8 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import javax.swing.plaf.basic.BasicBorders;
+
 public class OneAttack extends GamePlugin {
 
     public OneAttack() {
@@ -27,8 +29,8 @@ public class OneAttack extends GamePlugin {
                 Option.BACKPACK_MANAGER_REGISTER_TRAIL_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_EXCLUSIVE_CATEGORY,
                 Option.BACKPACK_MANAGER_USE_RANK_BOOTS,
-                Option.KIT_MANAGER_APPLY_KITS_ONCE,
-                Option.TEAM_MANAGER_DISABLE_RESPAWN);
+                Option.TEAM_MANAGER_DISABLE_RESPAWN,
+                Option.KIT_MANAGER_APPLY_KITS_ONCE);
     }
 
     @Getter
@@ -74,7 +76,7 @@ public class OneAttack extends GamePlugin {
         );
 
 
-        getKitManager().registerKits(Role.DEFAULT_DEFENDS, Role.DEFAULT_ATTACKER, Role.PUSHER);
+        getKitManager().registerKits(Role.DEFAULT_DEFENDS, Role.DEFAULT_ATTACKER, Role.PUSHER, Role.TRAPPER, Role.BARRICADER, Role.SAVER);
         getBackpackManager();
         getBackpackManager().setItemSlot(0);
         getBackpackManager().setFallbackSlot(0);

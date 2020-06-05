@@ -29,6 +29,7 @@ public class LobbyState extends LobbyGameState {
 
             corePlayer.getScoreboard().setNewObjective(new InGameObjective());
             player.getInventory().clear();
+
             player.getInventory().setArmorContents(null);
         }
     }
@@ -42,11 +43,11 @@ public class LobbyState extends LobbyGameState {
         } else if (second == 4) {
             OneAttack.getInstance().getTeamManager().setTeamsForRemainingPlayersBalanced();
 
-            for (GamePlayer gamePlayer : OneAttack.getInstance().getOnlineGamePlayers()) {
-                if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-                    gamePlayer.setKit(Role.DEFAULT_ATTACKER);
-                } else if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getDefenderTeam().getName())) {
-                    gamePlayer.setKit(Role.DEFAULT_DEFENDS);
+            for (GamePlayer gameplayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+                if (gameplayers.getTeam().getName().equals(OneAttack.getInstance().getAttackTeam().getName())) {
+                    gameplayers.setKit(Role.DEFAULT_ATTACKER);
+                } else {
+                    gameplayers.setKit(Role.DEFAULT_DEFENDS);
                 }
             }
         }

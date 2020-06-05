@@ -1,9 +1,12 @@
 package eu.mcone.oneattack.listener;
 
 import com.mongodb.client.model.FindOneAndReplaceOptions;
+import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
+import eu.mcone.gameapi.api.event.player.GamePlayerLoadedEvent;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
+import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
 import org.bukkit.GameMode;
@@ -14,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockEvent implements Listener {
 
@@ -37,6 +41,8 @@ public class BlockEvent implements Listener {
             if (block.getType().equals(Material.WOOD_PLATE)) {
                 e.setCancelled(false);
                 Items.trapLocations.add(block.getLocation());
+                System.out.println(block.getLocation());
+                System.out.println(Items.trapLocations.size());
             } else if (block.getType().equals(Material.STONE)) {
                 e.setCancelled(false);
             }
@@ -57,8 +63,17 @@ public class BlockEvent implements Listener {
         Material blockType = block.getType();
         byte blockData = block.getData();
 
-        if (Items.trapLocations.contains(e.getBlock().getLocation())) {
-            e.setCancelled(false);
+
+        if (Items.trapLocations.contains(block.getLocation())) {
+            GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
+            if (gamePlayer.getCurrentKit() != null) {
+                if (gamePlayer.getCurrentKit().equals(Role.TRAPPER)) {
+                    Items.trapLocations.remove(block.getLocation());
+                    block.setType(Material.AIR);
+                    p.getInventory().addItem(Items.ONE_TRAP.getItem());
+                    e.getBlock().getDrops().clear();
+                }
+            }
         }
 
         if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState || OneAttack.getInstance().getGameStateManager().getRunning() instanceof EndState) {

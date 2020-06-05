@@ -5,6 +5,7 @@ import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.inventorys.PlantInventory;
 import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +32,9 @@ public class EntityDamageByEntityListener implements Listener {
                     if (PlantInventory.isDefusing.contains(player)) {
                         PlantInventory.isDefusing.remove(player);
                         player.closeInventory();
-                        OneAttack.getInstance().getMessenger().send(player, "§4Der Entschärfungs Vorgang wurde abgebrochen!");
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            OneAttack.getInstance().getMessenger().send(all, "§4Der Entschärfungs Vorgang wurde abgebrochen!");
+                        }
                     }
                 } else {
                     e.setCancelled(true);
