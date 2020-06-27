@@ -28,19 +28,8 @@ public class LobbyState extends LobbyGameState {
             CorePlayer corePlayer = CoreSystem.getInstance().getCorePlayer(player.getUniqueId());
 
             corePlayer.getScoreboard().setNewObjective(new InGameObjective());
-            player.getInventory().clear();
 
-            player.getInventory().setArmorContents(null);
-        }
-    }
-
-    @Override
-    public void onCountdownSecond(CorePlugin plugin, int second) {
-        super.onCountdownSecond(plugin, second);
-
-        if (second == 5) {
             PlayerMoveListener.isPreparing.addAll(Bukkit.getOnlinePlayers());
-        } else if (second == 4) {
             OneAttack.getInstance().getTeamManager().setTeamsForRemainingPlayersBalanced();
 
             for (GamePlayer gameplayers : OneAttack.getInstance().getOnlineGamePlayers()) {
@@ -50,6 +39,11 @@ public class LobbyState extends LobbyGameState {
                     gameplayers.setKit(Role.DEFAULT_DEFENDS);
                 }
             }
+
+
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(null);
+
         }
     }
 }
