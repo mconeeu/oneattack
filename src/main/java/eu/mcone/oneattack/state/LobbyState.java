@@ -40,7 +40,6 @@ public class LobbyState extends LobbyGameState {
                 }
             }
 
-
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
 
