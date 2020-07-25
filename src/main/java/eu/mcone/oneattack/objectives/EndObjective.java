@@ -10,6 +10,7 @@ public class EndObjective extends LobbyObjective {
 
     @Override
     protected void onLobbyRegister(CorePlayer corePlayer, CoreSidebarObjectiveEntry entry) {
+        super.onRegister(corePlayer, entry);
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(corePlayer.getUuid());
         setDisplayName("§7§l⚔ §b§l§nOneAttack");
 
@@ -23,6 +24,7 @@ public class EndObjective extends LobbyObjective {
 
     @Override
     protected void onLobbyReload(CorePlayer corePlayer, CoreSidebarObjectiveEntry entry) {
+        super.onReload(corePlayer, entry);
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(corePlayer.getUuid());
         entry.setScore(1, "   §f§l" + gamePlayer.getRoundKills());
     }
