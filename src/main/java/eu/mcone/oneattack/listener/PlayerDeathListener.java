@@ -4,7 +4,6 @@ import eu.mcone.coresystem.api.bukkit.CoreSystem;
 import eu.mcone.coresystem.api.bukkit.hologram.Hologram;
 import eu.mcone.coresystem.api.bukkit.hologram.HologramData;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
-import eu.mcone.coresystem.api.bukkit.util.Messenger;
 import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.gameapi.api.player.PlayerManager;
@@ -26,17 +25,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 public class PlayerDeathListener implements Listener {
 
-    public static Hologram hologram;
-
-    public static void createDefuserHolo(Player player) {
-       hologram = CoreSystem.getInstance().getHologramManager().addHologram(
-                new HologramData(
-                        "defuser",
-                        new String[]{"§fEntschärfer"},
-                        new CoreLocation(player.getLocation())
-                )
-        );
-    }
 
     @EventHandler
     public void on(PlayerDeathEvent e) {
@@ -49,11 +37,11 @@ public class PlayerDeathListener implements Listener {
         e.getDrops().clear();
 
 
-        if (Items.hasDefuser.contains(player)) {
-            Items.hasDefuser.remove(player);
+        if (OneAttack.getInstance().getGadgetHandler().getHasDefuser().contains(player)) {
+            OneAttack.getInstance().getGadgetHandler().getHasDefuser().remove(player);
             player.getLocation().getWorld().dropItem(player.getLocation(), Items.DEFUSER.getItem());
 
-            createDefuserHolo(player);
+            OneAttack.getInstance().getGadgetHandler().createDefuserHolo(player);
 
             for (Player all : Bukkit.getOnlinePlayers()) {
                 GamePlayer gamePlayers = OneAttack.getInstance().getGamePlayer(all);
@@ -73,12 +61,17 @@ public class PlayerDeathListener implements Listener {
             if (killer != null) {
                 GamePlayer gameKiller = OneAttack.getInstance().getGamePlayer(killer);
                 gameKiller.addKills(1);
-                OneAttack.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.KILL_MESSAGE, "§7Der Spieler §f" + killer.getName() + "§7 hat §f" + player.getName() + "§7 getötet!");
-                killer.addPotionEffect(PotionEffectType.REGENERATION.createEffect(35, 3));
+
+                for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+                    OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), killer.getName() + "§7 hat §f" + player.getName() + "§7 getötet!");
+                }
+                 killer.addPotionEffect(PotionEffectType.REGENERATION.createEffect(35, 3));
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 player.playEffect(player.getLocation(), Effect.INSTANT_SPELL, 1);
             } else {
-                OneAttack.getInstance().getMessenger().broadcast(Messenger.Broadcast.BroadcastMessageTyp.DEATH_MESSAGE, "§7Der Spieler §f" + player.getName() + "§7 ist gestorben");
+                for (GamePlayer gamePlayers : OneAttack.getInstance().getOnlineGamePlayers()) {
+                    OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§7Der Spieler §f" + player.getName() + "§7 ist gestorben");
+                }
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
             }
 

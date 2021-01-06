@@ -29,7 +29,7 @@ public class LobbyState extends LobbyGameState {
 
             corePlayer.getScoreboard().setNewObjective(new InGameObjective());
 
-            PlayerMoveListener.isPreparing.addAll(Bukkit.getOnlinePlayers());
+            OneAttack.getInstance().getGadgetHandler().getIsPreparing().addAll(Bukkit.getOnlinePlayers());
             OneAttack.getInstance().getTeamManager().setTeamsForRemainingPlayersBalanced();
 
             for (GamePlayer gameplayers : OneAttack.getInstance().getOnlineGamePlayers()) {

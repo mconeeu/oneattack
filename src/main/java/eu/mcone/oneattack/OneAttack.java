@@ -8,6 +8,8 @@ import eu.mcone.gameapi.api.Option;
 import eu.mcone.gameapi.api.backpack.defaults.DefaultItem;
 import eu.mcone.gameapi.api.team.Team;
 import eu.mcone.oneattack.commands.OneAttackCMD;
+import eu.mcone.oneattack.handler.GadgetHandler;
+import eu.mcone.oneattack.handler.VoteHandler;
 import eu.mcone.oneattack.kit.Role;
 import eu.mcone.oneattack.listener.*;
 import eu.mcone.oneattack.state.EndState;
@@ -28,9 +30,8 @@ public class OneAttack extends GamePlugin {
                 Option.BACKPACK_MANAGER_REGISTER_HAT_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_TRAIL_CATEGORY,
                 Option.BACKPACK_MANAGER_REGISTER_EXCLUSIVE_CATEGORY,
-                Option.BACKPACK_MANAGER_USE_RANK_BOOTS,
-                Option.TEAM_MANAGER_DISABLE_RESPAWN,
-                Option.KIT_MANAGER_APPLY_KITS_ONCE);
+                Option.HOTBAR_SET_ITEMS,
+                Option.TEAM_MANAGER_DISABLE_RESPAWN);
     }
 
     @Getter
@@ -40,6 +41,10 @@ public class OneAttack extends GamePlugin {
     public static OneAttack instance;
     @Getter
     private CoreWorld gameWorld;
+    @Getter
+    private VoteHandler voteHandler;
+    @Getter
+    private GadgetHandler gadgetHandler;
 
     @Override
     public void onGameEnable() {
@@ -52,6 +57,10 @@ public class OneAttack extends GamePlugin {
                 .addGameState(new EndState())
                 .startGame();
         getPlayerManager();
+
+        System.out.println("aInitializing VoteHandler & GadgetHandler");
+        voteHandler = new VoteHandler();
+        gadgetHandler = new GadgetHandler();
 
         attackTeam = getTeamManager().registerNewTeam("Angreifer", "§cAngreifer", 1, ChatColor.RED, new ItemBuilder(Material.IRON_SWORD).create());
         defenderTeam = getTeamManager().registerNewTeam("Verteidiger", "§9Verteidiger", 2, ChatColor.BLUE, new ItemBuilder(Material.IRON_HELMET).create());
@@ -78,8 +87,6 @@ public class OneAttack extends GamePlugin {
 
         getKitManager().registerKits(Role.DEFAULT_DEFENDS, Role.DEFAULT_ATTACKER, Role.PUSHER, Role.TRAPPER, Role.BARRICADER, Role.SAVER);
         getBackpackManager();
-        getBackpackManager().setItemSlot(0);
-        getBackpackManager().setFallbackSlot(0);
         getBackpackManager().disableItem(DefaultItem.COINBOMB);
 
         gameWorld = CoreSystem.getInstance().getWorldManager().getWorld(getGameConfig().parseConfig().getGameWorld());

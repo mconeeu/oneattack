@@ -34,11 +34,11 @@ public class InventoryTriggerListener implements Listener {
 
         /* TRAPPER KIT */
         if (e.getClickedBlock() != null) {
-            if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.WOOD_PLATE && Items.trapLocations.contains(e.getClickedBlock().getLocation())) {
+            if (e.getAction() == Action.PHYSICAL && e.getClickedBlock().getType() == Material.WOOD_PLATE && OneAttack.getInstance().getGadgetHandler().getTrapLocations().contains(e.getClickedBlock().getLocation())) {
                 GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(player);
                 if (gamePlayer.getTeam().equals(OneAttack.getInstance().getAttackTeam())) {
                     e.getClickedBlock().setType(Material.AIR);
-                    Items.trapLocations.remove(e.getClickedBlock().getLocation());
+                    OneAttack.getInstance().getGadgetHandler().getTrapLocations().remove(e.getClickedBlock().getLocation());
                     player.damage(8F);
                     player.playSound(player.getLocation(), Sound.CAT_PURR, 1, 1);
                     OneAttack.getInstance().getMessenger().send(player, "§cDu hast schaden durch eine Bären Falle erhalten!");

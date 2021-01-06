@@ -21,26 +21,14 @@
 
     <developers>
         <developer>
-            <id>dominklippl</id>
-            <name>Dominik Lippl</name>
-            <url>https://dominiklippl.de</url>
-            <organization>MC ONE</organization>
-            <organizationUrl>https://www.mcone.eu</organizationUrl>
-            <roles>
-                <role>adminstrator</role>
-                <role>developer</role>
-            </roles>
-            <timezone>Europe/Berlin</timezone>
-        </developer>
-        <developer>
             <id>marvinhuelsmann</id>
             <name>Marvin Huelsmann</name>
             <url>https://marvhuelsmann.de</url>
             <organization>MC ONE</organization>
             <organizationUrl>https://www.mcone.eu</organizationUrl>
             <roles>
+                <role>adminstrator</role>
                 <role>developer</role>
-                <role>builder</role>
             </roles>
             <timezone>Europe/Berlin</timezone>
         </developer>
@@ -131,13 +119,13 @@
         <dependency> <!-- MCONE GameApi (This includes the api module) -->
             <groupId>eu.mcone.gameapi</groupId>
             <artifactId>api</artifactId>
-            <version>3.8.1-SNAPSHOT</version>
+            <version>4.1.5-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>eu.mcone.coresystem</groupId>
             <artifactId>bukkit-api</artifactId>
-            <version>10.8.2-SNAPSHOT</version>
+            <version>10.10.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

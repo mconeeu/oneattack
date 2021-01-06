@@ -1,13 +1,7 @@
 package eu.mcone.oneattack.listener;
 
 import eu.mcone.coresystem.api.bukkit.CoreSystem;
-import eu.mcone.coresystem.api.bukkit.hologram.Hologram;
-import eu.mcone.coresystem.api.bukkit.hologram.HologramData;
 import eu.mcone.coresystem.api.bukkit.player.CorePlayer;
-import eu.mcone.coresystem.api.bukkit.util.Messenger;
-import eu.mcone.coresystem.api.bukkit.world.CoreLocation;
-import eu.mcone.gameapi.api.event.player.GamePlayerUnloadEvent;
-import eu.mcone.gameapi.api.gamestate.common.EndGameState;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
@@ -16,15 +10,12 @@ import eu.mcone.oneattack.state.EndState;
 import eu.mcone.oneattack.state.LobbyState;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -32,8 +23,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.scoreboard.DisplaySlot;
-
-import java.time.OffsetDateTime;
 
 public class GeneralPlayerListener implements Listener {
 
@@ -54,11 +43,11 @@ public class GeneralPlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        if (Items.hasDefuser.contains(player)) {
-            Items.hasDefuser.remove(player);
+        if (OneAttack.getInstance().getGadgetHandler().getHasDefuser().contains(player)) {
+            OneAttack.getInstance().getGadgetHandler().getHasDefuser().remove(player);
             player.getLocation().getWorld().dropItem(player.getLocation(), Items.DEFUSER.getItem());
 
-            PlayerDeathListener.createDefuserHolo(player);
+            OneAttack.getInstance().getGadgetHandler().createDefuserHolo(player);
             for (Player all : Bukkit.getOnlinePlayers()) {
                 GamePlayer gamePlayers = OneAttack.getInstance().getGamePlayer(all);
                 if (gamePlayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
@@ -68,26 +57,13 @@ public class GeneralPlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onQuit(GamePlayerUnloadEvent e) {
-        Bukkit.getScheduler().runTask(OneAttack.getInstance(), () -> {
-            for (CorePlayer all : CoreSystem.getInstance().getOnlineCorePlayers()) {
-                if (!all.equals(e.getCorePlayer()))
-                    all.getScoreboard().getObjective(DisplaySlot.SIDEBAR).reload();
-            }
-        });
-    }
 
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onTrigger(InventoryClickEvent e) {
-        if ((OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState
+        e.setCancelled((OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState
                 || OneAttack.getInstance().getGameStateManager().getRunning() instanceof EndState)
-                && !e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) {
-            e.setCancelled(true);
-        } else {
-            e.setCancelled(false);
-        }
+                && !e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
     }
 
 
@@ -124,7 +100,7 @@ public class GeneralPlayerListener implements Listener {
                     if (gamePlayers.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
                         OneAttack.getInstance().getMessenger().send(gamePlayers.bukkit(), "§4Der Spieler §c" + p.getName() + "§4 hat den Entschärfer aufgenommen!");
                         if (CoreSystem.getInstance().getHologramManager().getHologram(OneAttack.getInstance().getGameWorld(), "defuser") != null) {
-                            CoreSystem.getInstance().getHologramManager().removeHologram(PlayerDeathListener.hologram);
+                            CoreSystem.getInstance().getHologramManager().removeHologram(OneAttack.getInstance().getGadgetHandler().getHologram());
                         }
                     }
                 }
@@ -150,7 +126,7 @@ public class GeneralPlayerListener implements Listener {
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
         if (e.getItemDrop().getItemStack().getType().equals(Items.DEFUSER.getItem().getType())) {
             if (gamePlayer.getTeam().getName().equalsIgnoreCase(OneAttack.getInstance().getAttackTeam().getName())) {
-                Items.hasDefuser.remove(p);
+                OneAttack.getInstance().getGadgetHandler().getHasDefuser().remove(p);
                 e.setCancelled(false);
 
                 for (Player all : Bukkit.getOnlinePlayers()) {

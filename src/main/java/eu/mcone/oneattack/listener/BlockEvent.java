@@ -1,8 +1,5 @@
 package eu.mcone.oneattack.listener;
 
-import com.mongodb.client.model.FindOneAndReplaceOptions;
-import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
-import eu.mcone.gameapi.api.event.player.GamePlayerLoadedEvent;
 import eu.mcone.gameapi.api.player.GamePlayer;
 import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.gadgets.Items;
@@ -17,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class BlockEvent implements Listener {
 
@@ -40,9 +36,9 @@ public class BlockEvent implements Listener {
 
             if (block.getType().equals(Material.WOOD_PLATE)) {
                 e.setCancelled(false);
-                Items.trapLocations.add(block.getLocation());
+                OneAttack.getInstance().getGadgetHandler().getTrapLocations().add(block.getLocation());
                 System.out.println(block.getLocation());
-                System.out.println(Items.trapLocations.size());
+                System.out.println(OneAttack.getInstance().getGadgetHandler().getTrapLocations().size());
             } else if (block.getType().equals(Material.STONE)) {
                 e.setCancelled(false);
             }
@@ -64,11 +60,11 @@ public class BlockEvent implements Listener {
         byte blockData = block.getData();
 
 
-        if (Items.trapLocations.contains(block.getLocation())) {
+        if (OneAttack.getInstance().getGadgetHandler().getTrapLocations().contains(block.getLocation())) {
             GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
             if (gamePlayer.getCurrentKit() != null) {
                 if (gamePlayer.getCurrentKit().equals(Role.TRAPPER)) {
-                    Items.trapLocations.remove(block.getLocation());
+                    OneAttack.getInstance().getGadgetHandler().getTrapLocations().remove(block.getLocation());
                     block.setType(Material.AIR);
                     p.getInventory().addItem(Items.ONE_TRAP.getItem());
                     e.getBlock().getDrops().clear();

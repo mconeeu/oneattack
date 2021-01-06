@@ -39,9 +39,7 @@ public class PlayerJoinListener implements Listener {
         player.getInventory().setItem(8, InventoryTriggerListener.QUIT_ITEM);
 
         if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof LobbyState) {
-            player.getInventory().setItem(7, TeamManager.TEAM);
-            player.getInventory().setItem(6, new ItemBuilder(Material.STORAGE_MINECART, 1, 0).displayName("§3§lRucksack §8» §7§oZeige deine gesammelten Items an").create());
-            CoreSystem.getInstance().getWorldManager().getWorld(OneAttack.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
+                CoreSystem.getInstance().getWorldManager().getWorld(OneAttack.getInstance().getGameConfig().parseConfig().getLobby()).teleport(player, "spawn");
         } else {
             player.getInventory().setItem(7, PlayerManager.SPECTATOR);
         }

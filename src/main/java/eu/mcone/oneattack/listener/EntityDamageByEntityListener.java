@@ -29,8 +29,8 @@ public class EntityDamageByEntityListener implements Listener {
                 if (!gameDamager.getTeam().getName().equalsIgnoreCase(gamePlayer.getTeam().getName())) {
                     e.setCancelled(false);
 
-                    if (PlantInventory.isDefusing.contains(player)) {
-                        PlantInventory.isDefusing.remove(player);
+                    if (OneAttack.getInstance().getGadgetHandler().getHasDefuser().contains(player)) {
+                        OneAttack.getInstance().getGadgetHandler().getHasDefuser().remove(player);
                         player.closeInventory();
                         for (Player all : Bukkit.getOnlinePlayers()) {
                             OneAttack.getInstance().getMessenger().send(all, "§4Der Entschärfungs Vorgang wurde abgebrochen!");

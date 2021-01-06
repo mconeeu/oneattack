@@ -36,7 +36,7 @@ public class DefendSpawnLocationInventory extends CoreInventory {
                 });
 
         setItem(InventorySlot.ROW_2_SLOT_5, new ItemBuilder(Material.CLAY, gerage, 0)
-                        .displayName("§eBombenOrt | §fGerage, Geragenraum")
+                        .displayName("§eBombenOrt | §fKüche, Büro")
                         .lore("§7§oVote dafür wo", "§7§oder BombenOrt ist", "", "§8» §f§nLinksklick§8 | §7§oVoten")
                         .create(),
 

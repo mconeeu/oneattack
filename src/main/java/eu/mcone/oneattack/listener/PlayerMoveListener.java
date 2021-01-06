@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class PlayerMoveListener implements Listener {
 
     private final ArrayList<Player> isOutside = new ArrayList<>();
-    public static final ArrayList<Player> isPreparing = new ArrayList<>();
+
 
     @EventHandler
     public void on(PlayerMoveEvent e) {
@@ -31,7 +31,7 @@ public class PlayerMoveListener implements Listener {
         GamePlayer gamePlayer = OneAttack.getInstance().getGamePlayer(p);
 
         if (OneAttack.getInstance().getGameStateManager().getRunning() instanceof IngameState) {
-            if (!isPreparing.contains(p)) {
+            if (!OneAttack.getInstance().getGadgetHandler().getIsPreparing().contains(p)) {
                 if (p.getLocation().add(0, +2, 0).getBlock().getType() == Material.AIR &&
                         p.getLocation().add(0, +3, 0).getBlock().getType() == Material.AIR &&
                         p.getLocation().add(0, +4, 0).getBlock().getType() == Material.AIR &&

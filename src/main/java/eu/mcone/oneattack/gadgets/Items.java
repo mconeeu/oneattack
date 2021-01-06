@@ -39,7 +39,4 @@ public enum Items {
         this.item = item;
     }
 
-
-    public static HashSet<Player> hasDefuser = new HashSet<>();
-    public static HashSet<Location> trapLocations = new HashSet<>();
 }

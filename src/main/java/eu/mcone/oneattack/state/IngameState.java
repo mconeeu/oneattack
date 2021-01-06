@@ -58,7 +58,7 @@ public class IngameState extends InGameState {
                                             gameplayers.bukkit().closeInventory();
 
                                             /*  REMOVE USER FROM THE LIST BECAUSE HE GO INSIDE || FOR NO DEATH IN THE WAITING HALL */
-                                            PlayerMoveListener.isPreparing.clear();
+                                            OneAttack.getInstance().getGadgetHandler().getIsPreparing().clear();
 
                                             /*  ADD DEFAULT KITS TO PLAYER THAT HAVE NO ONE PICK */
                                             if (gameplayers.getCurrentKit() != null) {
@@ -81,9 +81,9 @@ public class IngameState extends InGameState {
                                                 OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§cTöte alle Verteidiger oder entschärfe die Bombe");
 
                                                 /*  ADD DEFUSER */
-                                                if (Items.hasDefuser.isEmpty()) {
+                                                if (OneAttack.getInstance().getGadgetHandler().getHasDefuser().isEmpty()) {
                                                     gameplayers.bukkit().getInventory().addItem(Items.DEFUSER.getItem());
-                                                    Items.hasDefuser.add(gameplayers.bukkit());
+                                                    OneAttack.getInstance().getGadgetHandler().getHasDefuser().add(gameplayers.bukkit());
                                                     OneAttack.getInstance().getMessenger().send(gameplayers.bukkit(), "§aDu hast den Entschärfer aufgenommen!");
                                                 }
 

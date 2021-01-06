@@ -1,7 +1,6 @@
 package eu.mcone.oneattack.commands;
 
 import eu.mcone.coresystem.api.bukkit.command.CoreCommand;
-import eu.mcone.coresystem.api.bukkit.command.CorePlayerCommand;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
