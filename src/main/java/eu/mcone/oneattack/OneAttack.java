@@ -19,8 +19,6 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import javax.swing.plaf.basic.BasicBorders;
-
 public class OneAttack extends GamePlugin {
 
     public OneAttack() {

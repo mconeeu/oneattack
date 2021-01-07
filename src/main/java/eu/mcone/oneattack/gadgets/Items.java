@@ -2,12 +2,8 @@ package eu.mcone.oneattack.gadgets;
 
 import eu.mcone.coresystem.api.bukkit.item.ItemBuilder;
 import lombok.Getter;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashSet;
 
 public enum Items {
 
