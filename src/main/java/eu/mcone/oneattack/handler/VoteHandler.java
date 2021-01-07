@@ -5,11 +5,11 @@ import eu.mcone.oneattack.OneAttack;
 import eu.mcone.oneattack.inventorys.AttackKitInventory;
 import eu.mcone.oneattack.inventorys.DefendKitInventory;
 import eu.mcone.oneattack.inventorys.VoteSpawnLocationInventory;
-import eu.mcone.oneattack.kit.RoleTypes;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 @Getter
@@ -17,30 +17,29 @@ public class VoteHandler {
 
     private final ArrayList<Player> votedPlayer = new ArrayList<>();
     public final HashMap<Player, VoteLocationTypes> voteHashMap = new HashMap<>();
+    private int worldType = 0;
 
     /*  TELEPORT DEFENDS TO THE SPAWNLOCATION THAT THEY CHOOSED */
     public String mathDefenderSpawnLocation() {
 
      //TODO from the voteHashMap checkout the Location
 
-       /*    if (DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.kitchen && DefendSpawnLocationInventory.gerage < DefendSpawnLocationInventory.thirdfloor) {
-            System.out.println("§aTeleport defender to defender.spawn.gerage");
-            return "defender.spawn.gerage";
-        } else if (DefendSpawnLocationInventory.kitchen > DefendSpawnLocationInventory.thirdfloor) {
-            System.out.println("§aTeleport defender to defender.spawn.kitchen");
-            return "defender.spawn.kitchen";
-        } else if (DefendSpawnLocationInventory.kitchen < DefendSpawnLocationInventory.thirdfloor) {
-            System.out.println("§aTeleport defender to defender.spawn.thirdfloor");
-            return "defender.spawn.thirdfloor";
+        int childreen = Collections.frequency(new ArrayList<>(voteHashMap.values()), VoteLocationTypes.CHILDREEN_ROOM);
+        int office = Collections.frequency(new ArrayList<>(voteHashMap.values()), VoteLocationTypes.KITCHEN_OFFICE);
+        int gerage = Collections.frequency(new ArrayList<>(voteHashMap.values()), VoteLocationTypes.GERAGE_ROOM);
+
+        int max = childreen > gerage? (Math.max(childreen, office)): (Math.max(gerage, office));
+
+        if (max == childreen) {
+            worldType = 1;
+            return VoteLocationTypes.GERAGE_ROOM.getLocation();
+        } else if (max == office) {
+            worldType = 2;
+            return VoteLocationTypes.KITCHEN_OFFICE.getLocation();
         } else {
-            System.out.println("§aTeleport defender to defender.spawn.gerage because nobody he not choosed!");
-            return "defender.spawn.gerage";
+            worldType = 3;
+            return VoteLocationTypes.CHILDREEN_ROOM.getLocation();
         }
-
-
-        */
-
-        return null;
 
     }
 
@@ -49,34 +48,16 @@ public class VoteHandler {
 
         //TODO from the voteHashMap checkout the Location
 
-        /* if (AttackSpawnLocationInventory.gerage > AttackSpawnLocationInventory.main_entrance) {
-            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
-                return "attacker.spawn.bomb1.1";
-            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
-                return "attacker.spawn.bomb2.1";
-            } else {
-                return "attacker.spawn.bomb3.1";
-            }
-        } else if (AttackSpawnLocationInventory.gerage < AttackSpawnLocationInventory.main_entrance) {
-            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
-                return "attacker.spawn.bomb1.2";
-            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
-                return "attacker.spawn.bomb2.2";
-            } else {
-                return "attacker.spawn.bomb3.2";
-            }
-        } else {
-            if (mathDefenderSpawnLocation().equals("defender.spawn.gerage")) {
-                return "attacker.spawn.bomb1.1";
-            } else if (mathDefenderSpawnLocation().equals("defender.spawn.kitchen")) {
-                return "attacker.spawn.bomb2.1";
-            } else {
-                return "attacker.spawn.bomb3.1";
-            }
-        }
-        */
+        int main = Collections.frequency(new ArrayList<>(voteHashMap.values()), VoteLocationTypes.MAIN);
+        int gerage = Collections.frequency(new ArrayList<>(voteHashMap.values()), VoteLocationTypes.GERAGE);
 
-        return null;
+        int max = Math.max(main,gerage);
+
+        if (max == main) {
+            return VoteLocationTypes.GERAGE.getLocation() + worldType + "." + 2;
+        } else {
+            return VoteLocationTypes.GERAGE.getLocation() + worldType + "." + 1;
+        }
 
     }
 

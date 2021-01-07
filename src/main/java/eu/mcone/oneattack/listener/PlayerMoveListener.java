@@ -24,7 +24,6 @@ public class PlayerMoveListener implements Listener {
 
     private final ArrayList<Player> isOutside = new ArrayList<>();
 
-
     @EventHandler
     public void on(PlayerMoveEvent e) {
         Player p = e.getPlayer();
