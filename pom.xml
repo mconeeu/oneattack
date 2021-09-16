@@ -80,17 +80,11 @@
             </resource>
         </resources>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>mcone-systems</id>
-            <url>https://repo.onegaming.group/repository/mcone-systems/</url>
-        </repository>
-    </distributionManagement>
 
     <repositories>
         <repository>
-            <id>mcone-systems</id>
-            <url>https://repo.mcone.eu/repository/mcone-systems/</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/mconeeu/artifacts</url>
         </repository>
         <repository>
             <id>fawe-repo</id>
@@ -125,7 +119,7 @@
         <dependency>
             <groupId>eu.mcone.coresystem</groupId>
             <artifactId>bukkit-api</artifactId>
-            <version>10.10.2-SNAPSHOT</version>
+            <version>10.10.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
